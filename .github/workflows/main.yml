@@ -1,0 +1,63 @@
+name: CI Pipeline
+
+# Запускается при каждом push в репозиторий
+on: [push]
+
+# Основная задача
+jobs:
+  validation:
+    # Название задачи
+    name: Validate and Praise
+    # Используем последнюю версию Ubuntu
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Шаг 1: Получить код из репозитория
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      # Этот шаг загружает ваш код в виртуальную машину для обработки
+
+    # Шаг 2: Основное сообщение
+    - name: Success Message
+      run: |
+        echo "ВЫ МОЛОДЕЦ!"
+        echo "Коммит выполнен корректно"
+
+    # Шаг 3: Информация о коммите
+    - name: Commit Information
+      run: |
+        echo "Информация о коммите"
+        echo "Дата: $(date +'%d.%m.%Y')"
+        echo "Время: $(date +'%H:%M:%S')"
+        echo "Ветка: ${GITHUB_REF##*/}"
+        echo "Хеш коммита: ${GITHUB_SHA:0:8}"
+        # Показываем базовую информацию о вашем коммите
+
+    # Шаг 4: Случайное позитивное сообщение
+    - name: Positive Feedback
+      run: |
+        messages=(
+          "Отличная работа над кодом!"
+          "Ваш коммит выглядит профессионально!"
+          "Качество кода на высоком уровне!"
+          "Продолжайте в том же духе!"
+          "Коммит соответствует лучшим практикам!"
+          "Код хорошо структурирован!"
+          "Отличный прогресс в разработке!"
+        )
+        # Выбираем случайное сообщение из списка
+        random_index=$((RANDOM % ${#messages[@]}))
+        echo "Обратная связь: ${messages[$random_index]}"
+
+    # Шаг 5: Простая статистика проекта
+    - name: Project Statistics
+      run: |
+        echo "Статистика проекта"
+        echo "Всего файлов: $(find . -type f | wc -l)"
+        echo "JavaScript файлов: $(find . -name '*.js' | wc -l)"
+        echo "Текстовых файлов: $(find . -name '*.md' -o -name '*.txt' | wc -l)"
+
+    # Шаг 6: Финальное подтверждение 
+    - name: Final Validation
+      run: |
+        echo "    CI/CD ПРОЦЕСС УСПЕШНО ЗАВЕРШЕН"

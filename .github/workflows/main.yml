@@ -21,13 +21,14 @@ jobs:
       with:
         python-version: '3.9'
 
-    # Шаг 3: Обновить документацию
+    # Шаг 3: Обновить документацию (без коммита)
     - name: Update Documentation
       run: |
         echo "=== ОБНОВЛЕНИЕ ДОКУМЕНТАЦИИ ==="
         current_time=$(date '+%Y-%m-%d %H:%M:%S UTC')
         echo "Это документация. Последнее изменение было: $current_time" > DOCUMENTATION.md
         echo "Документация обновлена: $current_time"
+        echo "Файл обновлен локально в рамках этого workflow"
 
     # Шаг 4: Зафиксировать изменения в документации
     - name: Commit Documentation Changes

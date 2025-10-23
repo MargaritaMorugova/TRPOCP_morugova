@@ -40,20 +40,16 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # Получаем последние изменения
+        # Сначала коммитим наши изменения локально
+        git add DOCUMENTATION.md
+        git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')" || exit 0
+        
+        # Затем получаем последние изменения и перебазируем
         git pull --rebase origin main
         
-        # Добавляем и коммитим изменения
-        git add DOCUMENTATION.md
-        
-        # Проверяем есть ли изменения для коммита
-        if git diff --staged --quiet; then
-          echo "Нет изменений для коммита"
-        else
-          git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')"
-          git push
-          echo "Изменения в документации зафиксированы и отправлены"
-        fi
+        # И пушим
+        git push
+        echo "Изменения в документации зафиксированы и отправлены"
 
     # Шаг 5: Запуск Unit-тестов
     - name: Run Unit Tests

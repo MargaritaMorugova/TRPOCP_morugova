@@ -25,15 +25,7 @@ jobs:
       with:
         python-version: '3.9'
 
-    # Шаг 3: Обновить документацию
-    - name: Update Documentation
-      run: |
-        echo "=== ОБНОВЛЕНИЕ ДОКУМЕНТАЦИИ ==="
-        current_time=$(date '+%Y-%m-%d %H:%M:%S UTC')
-        echo "Это документация. Последнее изменение было: $current_time" > DOCUMENTATION.md
-        echo "Документация обновлена: $current_time"
 
-       # Шаг 4: Простой и надежный вариант
     - name: Commit Documentation Changes
       run: |
         echo "=== ФИКСАЦИЯ ИЗМЕНЕНИЙ В ДОКУМЕНТАЦИИ ==="

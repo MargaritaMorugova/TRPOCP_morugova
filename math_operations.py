@@ -21,3 +21,39 @@ def divide(a, b):
 def power(base, exponent):
     """Возведение в степень"""
     return base ** exponent
+
+def is_even(number):
+    """Проверка на четность"""
+    return number % 2 == 0
+
+def factorial(n):
+    """Вычисление факториала"""
+    if n < 0:
+        raise ValueError("Факториал отрицательного числа не определен")
+    if n == 0:
+        return 1
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+def calculate_circle_area(radius):
+    """Вычисление площади круга"""
+    if radius < 0:
+        raise ValueError("Радиус не может быть отрицательным")
+    return 3.14159 * radius ** 2
+
+def calculate_triangle_area(base, height):
+    """Вычисление площади треугольника"""
+    if base < 0 or height < 0:
+        raise ValueError("Основание и высота не могут быть отрицательными")
+    return 0.5 * base * height
+
+def is_prime(number):
+    """Проверка числа на простоту"""
+    if number < 2:
+        return False
+    for i in range(2, int(number ** 0.5) + 1):
+        if number % i == 0:
+            return False
+    return True

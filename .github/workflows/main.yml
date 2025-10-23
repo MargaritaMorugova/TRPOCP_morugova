@@ -12,8 +12,6 @@ jobs:
     # Шаг 1: Получить код из репозитория
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     # Шаг 2: Настроить Python
     - name: Setup Python
@@ -21,51 +19,35 @@ jobs:
       with:
         python-version: '3.9'
 
-    # Шаг 3: Обновить документацию (без коммита)
+    # Шаг 3: Обновить документацию (только для этого запуска)
     - name: Update Documentation
       run: |
         echo "=== ОБНОВЛЕНИЕ ДОКУМЕНТАЦИИ ==="
         current_time=$(date '+%Y-%m-%d %H:%M:%S UTC')
         echo "Это документация. Последнее изменение было: $current_time" > DOCUMENTATION.md
         echo "Документация обновлена: $current_time"
-        echo "Файл обновлен локально в рамках этого workflow"
+        echo "Изменения видны только в рамках этого workflow"
 
-    # Шаг 4: Зафиксировать изменения в документации
-    - name: Commit Documentation Changes
-      run: |
-        echo "=== ФИКСАЦИЯ ИЗМЕНЕНИЙ В ДОКУМЕНТАЦИИ ==="
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add DOCUMENTATION.md
-        
-        # Проверяем есть ли изменения для коммита
-        if git diff --staged --quiet; then
-          echo "Нет изменений для коммита"
-        else
-          git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')"
-          git push
-          echo "Изменения в документации зафиксированы и отправлены"
-        fi
-
-    # Шаг 5: Запуск Unit-тестов
+    # Остальные шаги без коммита...
+    # Шаг 4: Запуск Unit-тестов
     - name: Run Unit Tests
       run: |
         echo "=== ЗАПУСК UNIT-ТЕСТОВ ==="
         python3 test_unit.py
 
-    # Шаг 6: Запуск Интеграционных тестов
+    # Шаг 5: Запуск Интеграционных тестов
     - name: Run Integration Tests
       run: |
         echo "=== ЗАПУСК ИНТЕГРАЦИОННЫХ ТЕСТОВ ==="
         python3 test_integration.py
 
-    # Шаг 7: Запуск всех тестов
+    # Шаг 6: Запуск всех тестов
     - name: Run All Tests
       run: |
         echo "=== ЗАПУСК ВСЕХ ТЕСТОВ ==="
         python3 run_tests.py
 
-    # Шаг 8: Успешное завершение
+    # Шаг 7: Успешное завершение
     - name: Success Message
       run: |
         echo "========================================"
@@ -73,5 +55,5 @@ jobs:
         echo "========================================"
         echo "Python тестирование завершено успешно"
         echo "Ветка: ${GITHUB_REF##*/}"
-        echo "Документация обновлена"
+        echo "Документация временно обновлена для этого запуска"
         echo "========================================"

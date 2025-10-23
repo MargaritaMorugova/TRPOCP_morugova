@@ -33,7 +33,7 @@ jobs:
         echo "Это документация. Последнее изменение было: $current_time" > DOCUMENTATION.md
         echo "Документация обновлена: $current_time"
 
-    # Шаг 4: Зафиксировать изменения в документации
+    # Шаг 4: Зафиксировать изменения в документации (принудительно)
     - name: Commit Documentation Changes
       run: |
         echo "=== ФИКСАЦИЯ ИЗМЕНЕНИЙ В ДОКУМЕНТАЦИИ ==="
@@ -41,16 +41,15 @@ jobs:
         git config --local user.name "GitHub Action"
         git add DOCUMENTATION.md
         
-        # Проверяем есть ли изменения для коммита
-        if git diff --staged --quiet; then
-          echo "Нет изменений для коммита"
-        else
-          git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')"
-          git push
-          echo "Изменения в документации зафиксированы и отправлены"
-        fi
+        # Коммитим изменения
+        git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')" || echo "Нет изменений для коммита"
+        
+        # Принудительно обновляем remote ссылку и пушим
+        git fetch origin
+        git rebase origin/main
+        git push origin HEAD:main
+        echo "Изменения в документации зафиксированы и отправлены"
 
-    # Остальные шаги остаются без изменений...
     # Шаг 5: Запуск Unit-тестов
     - name: Run Unit Tests
       run: |

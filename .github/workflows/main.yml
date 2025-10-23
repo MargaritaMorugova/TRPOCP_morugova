@@ -33,22 +33,25 @@ jobs:
         echo "Это документация. Последнее изменение было: $current_time" > DOCUMENTATION.md
         echo "Документация обновлена: $current_time"
 
-    # Шаг 4: Зафиксировать изменения в документации
+       # Шаг 4: Простой и надежный вариант
     - name: Commit Documentation Changes
       run: |
         echo "=== ФИКСАЦИЯ ИЗМЕНЕНИЙ В ДОКУМЕНТАЦИИ ==="
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         
-        # Сначала коммитим наши изменения локально
+        # Принудительно обновляемся до последней версии main
+        git fetch origin
+        git reset --hard origin/main
+        
+        # Записываем изменения в документацию
+        current_time=$(date '+%Y-%m-%d %H:%M:%S UTC')
+        echo "Это документация. Последнее изменение было: $current_time" > DOCUMENTATION.md
+        
+        # Коммитим и пушим с принудительной перезаписью
         git add DOCUMENTATION.md
-        git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')" || exit 0
-        
-        # Затем получаем последние изменения и перебазируем
-        git pull --rebase origin main
-        
-        # И пушим
-        git push
+        git commit -m "Автоматическое обновление документации: $(date '+%Y-%m-%d %H:%M:%S')"
+        git push --force-with-lease
         echo "Изменения в документации зафиксированы и отправлены"
 
     # Шаг 5: Запуск Unit-тестов
